@@ -1,233 +1,145 @@
 
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#0d0f14;
-  --s1:#13161e;
-  --s2:#181c26;
-  --border:#ffffff0f;
-  --border2:#ffffff18;
-  --ce:#f97316;
-  --ce2:#fb923c;
-  --pe:#6366f1;
-  --pe2:#818cf8;
-  --tot:#10b981;
-  --tot2:#34d399;
-  --text:#f1f5f9;
-  --muted:#64748b;
-  --muted2:#94a3b8;
-}
-body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;min-height:100vh;padding:0}
-.wrap{max-width:760px;margin:0 auto;padding:2rem 1.25rem 3rem}
-
-/* header */
-.hdr{text-align:center;margin-bottom:2.5rem;position:relative}
-.hdr-eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:10px}
-.hdr-eyebrow::before,.hdr-eyebrow::after{content:'';width:32px;height:1px;background:linear-gradient(90deg,transparent,var(--muted))}
-.hdr-eyebrow::after{background:linear-gradient(90deg,var(--muted),transparent)}
-.hdr h1{font-family:'Instrument Serif',serif;font-size:clamp(1.8rem,5vw,2.6rem);font-weight:400;line-height:1.1;letter-spacing:-0.5px;margin-bottom:6px}
-.hdr h1 em{font-style:italic;background:linear-gradient(135deg,var(--ce),var(--pe));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hdr-sub{font-size:12px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:1.5px}
-
-/* input section */
-.sec-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3.5px;text-transform:uppercase;color:var(--muted);margin:0 0 10px;display:flex;align-items:center;gap:8px}
-.sec-label::after{content:'';flex:1;height:1px;background:var(--border2)}
-
-.inputs-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:2rem}
-@media(max-width:520px){.inputs-row{grid-template-columns:1fr 1fr}}
-
-.ibox{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:14px 16px;transition:border-color .2s,background .2s;position:relative;overflow:hidden}
-.ibox::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .2s;border-radius:14px}
-.ibox:focus-within{border-color:var(--border2);background:var(--s2)}
-.ibox.ce{border-color:rgba(249,115,22,.2)}
-.ibox.ce:focus-within{border-color:rgba(249,115,22,.5);background:rgba(249,115,22,.04)}
-.ibox.pe{border-color:rgba(99,102,241,.2)}
-.ibox.pe:focus-within{border-color:rgba(99,102,241,.5);background:rgba(99,102,241,.04)}
-.ibox label{display:block;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:8px}
-.ibox.ce label{color:var(--ce)}
-.ibox.pe label{color:var(--pe)}
-.ibox:not(.ce):not(.pe) label{color:var(--muted2)}
-.ibox input{width:100%;background:transparent;border:none;outline:none;font-family:'DM Mono',monospace;font-size:1.35rem;font-weight:500;color:var(--text);-moz-appearance:textfield}
-.ibox input::-webkit-inner-spin-button,.ibox input::-webkit-outer-spin-button{-webkit-appearance:none}
-.ibox input::placeholder{color:#ffffff12}
-
-/* summary cards */
-.cards-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:2rem}
-@media(max-width:440px){.cards-row{grid-template-columns:1fr}}
-
-.scard{border-radius:18px;padding:20px 18px;position:relative;overflow:hidden;border:1px solid transparent;transition:transform .2s}
-.scard:hover{transform:translateY(-2px)}
-.scard.ce{background:linear-gradient(135deg,rgba(249,115,22,.12),rgba(249,115,22,.05));border-color:rgba(249,115,22,.2)}
-.scard.pe{background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(99,102,241,.05));border-color:rgba(99,102,241,.2)}
-.scard.tot{background:linear-gradient(135deg,rgba(16,185,129,.12),rgba(16,185,129,.05));border-color:rgba(16,185,129,.2)}
-.scard-dot{width:8px;height:8px;border-radius:50%;margin-bottom:14px}
-.scard.ce .scard-dot{background:var(--ce);box-shadow:0 0 10px var(--ce)}
-.scard.pe .scard-dot{background:var(--pe);box-shadow:0 0 10px var(--pe)}
-.scard.tot .scard-dot{background:var(--tot);box-shadow:0 0 10px var(--tot)}
-.scard-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:12px}
-.scard.ce .scard-lbl{color:var(--ce2)}
-.scard.pe .scard-lbl{color:var(--pe2)}
-.scard.tot .scard-lbl{color:var(--tot2)}
-.scard-val{font-family:'Instrument Serif',serif;font-size:2.8rem;line-height:1;margin-bottom:6px;font-weight:400}
-.scard.ce .scard-val{color:var(--ce)}
-.scard.pe .scard-val{color:var(--pe)}
-.scard.tot .scard-val{color:var(--tot)}
-.scard-sub{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace}
-
-/* table */
-.tbl-outer{border-radius:18px;overflow:hidden;border:1px solid var(--border2);margin-bottom:1.5rem}
-.tbl-scroll{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-family:'DM Mono',monospace;font-size:12px}
-thead tr{background:var(--s2)}
-th{padding:11px 14px;text-align:center;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);font-weight:400;border-bottom:1px solid var(--border);white-space:nowrap}
-th:first-child{text-align:left}
-td{padding:10px 14px;text-align:center;border-bottom:1px solid var(--border);font-weight:500;transition:background .15s}
-td:first-child{text-align:left;font-size:11px;color:var(--muted2);font-weight:400}
-tr:last-child td{border-bottom:none}
-tbody tr{background:var(--s1)}
-tbody tr:nth-child(even){background:var(--bg)}
-tbody tr:hover td{background:rgba(255,255,255,.02)}
-.row-today td{background:rgba(16,185,129,.05) !important}
-.row-today td:first-child{color:var(--tot) !important;font-weight:500}
-.row-expiry td:first-child{color:#f43f5e !important}
-.ce-v{color:var(--ce)}
-.pe-v{color:var(--pe)}
-.tot-v{color:var(--tot)}
-.fac-v{color:var(--muted);font-weight:400}
-
-.bdg{display:inline-flex;align-items:center;font-size:8px;padding:2px 6px;border-radius:4px;margin-left:6px;font-weight:500;letter-spacing:1px;vertical-align:middle;line-height:1.4}
-.bdg-t{background:rgba(16,185,129,.15);color:var(--tot2)}
-.bdg-e{background:rgba(244,63,94,.15);color:#fb7185}
-
-/* status */
-.status{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--s1);border:1px solid var(--border);border-radius:12px;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.5px}
-.pulse{width:6px;height:6px;border-radius:50%;background:var(--tot);animation:p 2s infinite;flex-shrink:0}
-@keyframes p{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(16,185,129,.4)}50%{opacity:.5;box-shadow:0 0 0 5px rgba(16,185,129,0)}}
-
-.empty-row td{text-align:center;padding:32px;color:var(--muted);font-size:11px;background:var(--s1) !important}
-
-/* fade in */
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.hdr{animation:fadeUp .5s ease both}
-.inputs-row{animation:fadeUp .5s .1s ease both}
-.cards-row{animation:fadeUp .5s .2s ease both}
-.tbl-outer{animation:fadeUp .5s .3s ease both}
-.status{animation:fadeUp .5s .4s ease both}
+  .fvc { padding: 1rem 0; font-family: var(--font-mono); }
+  .fvc-inputs { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; margin-bottom: 1.5rem; }
+  @media(max-width:500px){ .fvc-inputs { grid-template-columns: 1fr 1fr; } }
+  .fvc-icard { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 10px 12px; }
+  .fvc-icard label { display: block; font-size: 11px; color: var(--color-text-secondary); margin-bottom: 6px; letter-spacing: 0.5px; }
+  .fvc-icard input { width: 100%; background: transparent; border: none; outline: none; font-family: var(--font-mono); font-size: 1.15rem; font-weight: 500; color: var(--color-text-primary); -moz-appearance: textfield; }
+  .fvc-icard input::-webkit-inner-spin-button, .fvc-icard input::-webkit-outer-spin-button { -webkit-appearance: none; }
+  .fvc-icard.ce { border-color: #D85A30; }
+  .fvc-icard.pe { border-color: #378ADD; }
+  .fvc-icard.ce label { color: #D85A30; }
+  .fvc-icard.pe label { color: #378ADD; }
+  .fvc-cards { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; margin-bottom: 1.5rem; }
+  @media(max-width:440px){ .fvc-cards { grid-template-columns: 1fr; } }
+  .fvc-card { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 14px; text-align: center; }
+  .fvc-card .lbl { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 8px; letter-spacing: 0.5px; }
+  .fvc-card .val { font-size: 1.9rem; font-weight: 500; line-height: 1; margin-bottom: 2px; }
+  .fvc-card .sub { font-size: 11px; color: var(--color-text-tertiary); }
+  .fvc-card.ce .val { color: #D85A30; }
+  .fvc-card.pe .val { color: #378ADD; }
+  .fvc-card.tot .val { color: #1D9E75; }
+  .fvc-sec { font-size: 11px; color: var(--color-text-tertiary); letter-spacing: 2px; text-transform: uppercase; margin: 0 0 8px; display: flex; align-items: center; gap: 8px; }
+  .fvc-sec::after { content:''; flex:1; height:0.5px; background: var(--color-border-tertiary); }
+  .tbl-wrap { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); overflow: hidden; overflow-x: auto; margin-bottom: 1rem; }
+  table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 13px; background: var(--color-background-primary); }
+  thead tr { background: var(--color-background-secondary); }
+  th { padding: 9px 12px; text-align: center; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--color-text-tertiary); font-weight: 400; border-bottom: 0.5px solid var(--color-border-tertiary); white-space: nowrap; }
+  th:first-child { text-align: left; }
+  td { padding: 8px 12px; text-align: center; border-bottom: 0.5px solid var(--color-border-tertiary); color: var(--color-text-primary); font-weight: 500; }
+  td:first-child { text-align: left; font-size: 12px; color: var(--color-text-secondary); font-weight: 400; }
+  tr:last-child td { border-bottom: none; }
+  .row-today td { background: rgba(29,158,117,0.07); }
+  .row-today td:first-child { color: #1D9E75 !important; font-weight: 500; }
+  .row-expiry td:first-child { color: #E24B4A !important; }
+  .ce-v { color: #D85A30; }
+  .pe-v { color: #378ADD; }
+  .tot-v { color: #1D9E75; }
+  .fac-v { color: var(--color-text-tertiary); font-size: 12px; font-weight: 400; }
+  .bdg { display: inline-block; font-size: 9px; padding: 1px 5px; border-radius: 3px; margin-left: 5px; font-weight: 500; letter-spacing: 0.5px; vertical-align: middle; }
+  .bdg-t { background: rgba(29,158,117,0.15); color: #0F6E56; }
+  .bdg-e { background: rgba(226,75,74,0.15); color: #A32D2D; }
+  .empty { text-align: center; padding: 24px; color: var(--color-text-tertiary); font-size: 13px; }
 </style>
 
-<div class="wrap">
-  <div class="hdr">
-    <div class="hdr-eyebrow">Options Pricing Tool</div>
-    <h1>Fair <em>Value</em> Calculator</h1>
-    <div class="hdr-sub">Opening Day · Time Decay Model</div>
-  </div>
-
-  <div class="sec-label">Inputs</div>
-  <div class="inputs-row">
-    <div class="ibox ce">
+<div class="fvc">
+  <div class="fvc-sec">Inputs</div>
+  <div class="fvc-inputs">
+    <div class="fvc-icard ce">
       <label>ATM CE Premium</label>
       <input type="number" id="ce" placeholder="120" oninput="calc()">
     </div>
-    <div class="ibox pe">
+    <div class="fvc-icard pe">
       <label>ATM PE Premium</label>
       <input type="number" id="pe" placeholder="100" oninput="calc()">
     </div>
-    <div class="ibox">
-      <label>Total Days</label>
+    <div class="fvc-icard">
+      <label>Total Days (Expiry)</label>
       <input type="number" id="totalDays" placeholder="7" oninput="calc()">
     </div>
-    <div class="ibox">
-      <label>Days Left</label>
+    <div class="fvc-icard">
+      <label>Days Left Today</label>
       <input type="number" id="daysLeft" placeholder="2" oninput="calc()">
     </div>
   </div>
 
-  <div class="sec-label">Today's Opening Fair Value</div>
-  <div class="cards-row">
-    <div class="scard ce">
-      <div class="scard-dot"></div>
-      <div class="scard-lbl">CE Fair Value</div>
-      <div class="scard-val" id="todayCE">—</div>
-      <div class="scard-sub">Call Option</div>
+  <div class="fvc-sec">Today's Opening Fair Value</div>
+  <div class="fvc-cards">
+    <div class="fvc-card ce">
+      <div class="lbl">CE Fair Value</div>
+      <div class="val" id="todayCE">—</div>
+      <div class="sub">Call Option</div>
     </div>
-    <div class="scard pe">
-      <div class="scard-dot"></div>
-      <div class="scard-lbl">PE Fair Value</div>
-      <div class="scard-val" id="todayPE">—</div>
-      <div class="scard-sub">Put Option</div>
+    <div class="fvc-card pe">
+      <div class="lbl">PE Fair Value</div>
+      <div class="val" id="todayPE">—</div>
+      <div class="sub">Put Option</div>
     </div>
-    <div class="scard tot">
-      <div class="scard-dot"></div>
-      <div class="scard-lbl">Combined</div>
-      <div class="scard-val" id="todayTotal">—</div>
-      <div class="scard-sub">PE + CE Total</div>
+    <div class="fvc-card tot">
+      <div class="lbl">PE + CE Combined</div>
+      <div class="val" id="todayTotal">—</div>
+      <div class="sub">Total Premium</div>
     </div>
   </div>
 
-  <div class="sec-label">Day-wise Fair Value Table</div>
-  <div class="tbl-outer">
-    <div class="tbl-scroll">
-      <table>
-        <thead>
-          <tr>
-            <th>Day</th>
-            <th>Days Left</th>
-            <th>√ Factor</th>
-            <th style="color:var(--ce2)">CE Fair Value</th>
-            <th style="color:var(--pe2)">PE Fair Value</th>
-            <th style="color:var(--tot2)">PE + CE</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody">
-          <tr class="empty-row"><td colspan="6">Enter all inputs to see the table</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="status">
-    <div class="pulse"></div>
-    <span id="statusText">Waiting for input…</span>
+  <div class="fvc-sec">Day-wise Fair Value Table</div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Day</th>
+          <th>Days Left</th>
+          <th>√ Factor</th>
+          <th style="color:#D85A30">CE Fair Value</th>
+          <th style="color:#378ADD">PE Fair Value</th>
+          <th style="color:#1D9E75">PE + CE</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <tr><td colspan="6" class="empty">Enter all inputs to see the table</td></tr>
+      </tbody>
+    </table>
   </div>
 </div>
 
 <script>
-function calc(){
-  const ce=parseFloat(document.getElementById('ce').value);
-  const pe=parseFloat(document.getElementById('pe').value);
-  const total=parseInt(document.getElementById('totalDays').value);
-  const today=parseInt(document.getElementById('daysLeft').value);
+function calc() {
+  const ce    = parseFloat(document.getElementById('ce').value);
+  const pe    = parseFloat(document.getElementById('pe').value);
+  const total = parseInt(document.getElementById('totalDays').value);
+  const today = parseInt(document.getElementById('daysLeft').value);
 
-  if(!ce||!pe||!total||!today||total<1||today<1||today>total){
-    document.getElementById('tableBody').innerHTML='<tr class="empty-row"><td colspan="6">Enter valid inputs to see the table</td></tr>';
-    ['todayCE','todayPE','todayTotal'].forEach(id=>document.getElementById(id).textContent='—');
-    document.getElementById('statusText').textContent='Waiting for input…';
+  if (!ce || !pe || !total || !today || total < 1 || today < 1 || today > total) {
+    document.getElementById('tableBody').innerHTML =
+      `<tr><td colspan="6" class="empty">Enter valid inputs to see the table</td></tr>`;
+    ['todayCE','todayPE','todayTotal'].forEach(id =>
+      document.getElementById(id).textContent = '—');
     return;
   }
 
-  const factor=Math.sqrt(today/total);
-  const ceFair=ce*factor;
-  const peFair=pe*factor;
-  const combined=ceFair+peFair;
+  const factor   = Math.sqrt(today / total);
+  const ceFair   = ce * factor;
+  const peFair   = pe * factor;
+  const combined = ceFair + peFair;
 
-  document.getElementById('todayCE').textContent=ceFair.toFixed(1);
-  document.getElementById('todayPE').textContent=peFair.toFixed(1);
-  document.getElementById('todayTotal').textContent=combined.toFixed(1);
+  document.getElementById('todayCE').textContent    = ceFair.toFixed(1);
+  document.getElementById('todayPE').textContent    = peFair.toFixed(1);
+  document.getElementById('todayTotal').textContent = combined.toFixed(1);
 
-  let rows='';
-  for(let dLeft=total;dLeft>=1;dLeft--){
-    const f=Math.sqrt(dLeft/total);
-    const ceV=(ce*f).toFixed(1);
-    const peV=(pe*f).toFixed(1);
-    const totV=(ce*f+pe*f).toFixed(1);
-    const dayNum=total-dLeft+1;
-    const isToday=(dLeft===today);
-    const isExpiry=(dLeft===1);
-    let dayLabel=`Day ${dayNum}`;
-    if(isToday) dayLabel+=` <span class="bdg bdg-t">TODAY</span>`;
-    if(isExpiry) dayLabel+=` <span class="bdg bdg-e">EXPIRY</span>`;
-    rows+=`<tr class="${isToday?'row-today':isExpiry?'row-expiry':''}">
+  let rows = '';
+  for (let dLeft = total; dLeft >= 1; dLeft--) {
+    const f    = Math.sqrt(dLeft / total);
+    const ceV  = (ce * f).toFixed(1);
+    const peV  = (pe * f).toFixed(1);
+    const totV = (ce * f + pe * f).toFixed(1);
+    const dayNum = total - dLeft + 1;
+    const isToday  = (dLeft === today);
+    const isExpiry = (dLeft === 1);
+    let dayLabel = `Day ${dayNum}`;
+    if (isToday)  dayLabel += ` <span class="bdg bdg-t">TODAY</span>`;
+    if (isExpiry) dayLabel += ` <span class="bdg bdg-e">EXPIRY</span>`;
+    rows += `<tr class="${isToday ? 'row-today' : isExpiry ? 'row-expiry' : ''}">
       <td>${dayLabel}</td>
       <td>${dLeft}</td>
       <td class="fac-v">${f.toFixed(4)}</td>
@@ -236,16 +148,14 @@ function calc(){
       <td class="tot-v">${totV}</td>
     </tr>`;
   }
-  document.getElementById('tableBody').innerHTML=rows;
-  document.getElementById('statusText').textContent=
-    `CE: ${ce}  ·  PE: ${pe}  ·  Days Left: ${today}/${total}  ·  Fair CE ≈ ${ceFair.toFixed(1)}  ·  Fair PE ≈ ${peFair.toFixed(1)}  ·  Total ≈ ${combined.toFixed(1)}`;
+  document.getElementById('tableBody').innerHTML = rows;
 }
 
-window.onload=()=>{
-  document.getElementById('ce').value=120;
-  document.getElementById('pe').value=100;
-  document.getElementById('totalDays').value=7;
-  document.getElementById('daysLeft').value=2;
+window.onload = () => {
+  document.getElementById('ce').value        = 120;
+  document.getElementById('pe').value        = 100;
+  document.getElementById('totalDays').value = 7;
+  document.getElementById('daysLeft').value  = 2;
   calc();
 };
 </script>
