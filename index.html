@@ -1,495 +1,251 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Options Fair Value Calculator</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0c10;
-    --surface: #111318;
-    --surface2: #171a22;
-    --border: #1e2330;
-    --accent: #00d4aa;
-    --ce-color: #ff6b35;
-    --pe-color: #4f8ef7;
-    --total-color: #00d4aa;
-    --text: #e8ecf4;
-    --muted: #5a6280;
-  }
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0f14;
+  --s1:#13161e;
+  --s2:#181c26;
+  --border:#ffffff0f;
+  --border2:#ffffff18;
+  --ce:#f97316;
+  --ce2:#fb923c;
+  --pe:#6366f1;
+  --pe2:#818cf8;
+  --tot:#10b981;
+  --tot2:#34d399;
+  --text:#f1f5f9;
+  --muted:#64748b;
+  --muted2:#94a3b8;
+}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;min-height:100vh;padding:0}
+.wrap{max-width:760px;margin:0 auto;padding:2rem 1.25rem 3rem}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+/* header */
+.hdr{text-align:center;margin-bottom:2.5rem;position:relative}
+.hdr-eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:10px}
+.hdr-eyebrow::before,.hdr-eyebrow::after{content:'';width:32px;height:1px;background:linear-gradient(90deg,transparent,var(--muted))}
+.hdr-eyebrow::after{background:linear-gradient(90deg,var(--muted),transparent)}
+.hdr h1{font-family:'Instrument Serif',serif;font-size:clamp(1.8rem,5vw,2.6rem);font-weight:400;line-height:1.1;letter-spacing:-0.5px;margin-bottom:6px}
+.hdr h1 em{font-style:italic;background:linear-gradient(135deg,var(--ce),var(--pe));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hdr-sub{font-size:12px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:1.5px}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'JetBrains Mono', monospace;
-    min-height: 100vh;
-    padding: 24px 16px 48px;
-    background-image:
-      radial-gradient(ellipse at 15% 10%, rgba(79,142,247,0.07) 0%, transparent 50%),
-      radial-gradient(ellipse at 85% 85%, rgba(0,212,170,0.07) 0%, transparent 50%);
-  }
+/* input section */
+.sec-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3.5px;text-transform:uppercase;color:var(--muted);margin:0 0 10px;display:flex;align-items:center;gap:8px}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border2)}
 
-  header {
-    text-align: center;
-    margin-bottom: 32px;
-  }
+.inputs-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:2rem}
+@media(max-width:520px){.inputs-row{grid-template-columns:1fr 1fr}}
 
-  header h1 {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: clamp(1.5rem, 4vw, 2.1rem);
-    letter-spacing: -0.5px;
-  }
+.ibox{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:14px 16px;transition:border-color .2s,background .2s;position:relative;overflow:hidden}
+.ibox::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .2s;border-radius:14px}
+.ibox:focus-within{border-color:var(--border2);background:var(--s2)}
+.ibox.ce{border-color:rgba(249,115,22,.2)}
+.ibox.ce:focus-within{border-color:rgba(249,115,22,.5);background:rgba(249,115,22,.04)}
+.ibox.pe{border-color:rgba(99,102,241,.2)}
+.ibox.pe:focus-within{border-color:rgba(99,102,241,.5);background:rgba(99,102,241,.04)}
+.ibox label{display:block;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:8px}
+.ibox.ce label{color:var(--ce)}
+.ibox.pe label{color:var(--pe)}
+.ibox:not(.ce):not(.pe) label{color:var(--muted2)}
+.ibox input{width:100%;background:transparent;border:none;outline:none;font-family:'DM Mono',monospace;font-size:1.35rem;font-weight:500;color:var(--text);-moz-appearance:textfield}
+.ibox input::-webkit-inner-spin-button,.ibox input::-webkit-outer-spin-button{-webkit-appearance:none}
+.ibox input::placeholder{color:#ffffff12}
 
-  header h1 span { color: var(--accent); }
+/* summary cards */
+.cards-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:2rem}
+@media(max-width:440px){.cards-row{grid-template-columns:1fr}}
 
-  header p {
-    font-size: 0.68rem;
-    color: var(--muted);
-    margin-top: 6px;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-  }
+.scard{border-radius:18px;padding:20px 18px;position:relative;overflow:hidden;border:1px solid transparent;transition:transform .2s}
+.scard:hover{transform:translateY(-2px)}
+.scard.ce{background:linear-gradient(135deg,rgba(249,115,22,.12),rgba(249,115,22,.05));border-color:rgba(249,115,22,.2)}
+.scard.pe{background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(99,102,241,.05));border-color:rgba(99,102,241,.2)}
+.scard.tot{background:linear-gradient(135deg,rgba(16,185,129,.12),rgba(16,185,129,.05));border-color:rgba(16,185,129,.2)}
+.scard-dot{width:8px;height:8px;border-radius:50%;margin-bottom:14px}
+.scard.ce .scard-dot{background:var(--ce);box-shadow:0 0 10px var(--ce)}
+.scard.pe .scard-dot{background:var(--pe);box-shadow:0 0 10px var(--pe)}
+.scard.tot .scard-dot{background:var(--tot);box-shadow:0 0 10px var(--tot)}
+.scard-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:12px}
+.scard.ce .scard-lbl{color:var(--ce2)}
+.scard.pe .scard-lbl{color:var(--pe2)}
+.scard.tot .scard-lbl{color:var(--tot2)}
+.scard-val{font-family:'Instrument Serif',serif;font-size:2.8rem;line-height:1;margin-bottom:6px;font-weight:400}
+.scard.ce .scard-val{color:var(--ce)}
+.scard.pe .scard-val{color:var(--pe)}
+.scard.tot .scard-val{color:var(--tot)}
+.scard-sub{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace}
 
-  .formula-box {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--accent);
-    border-radius: 8px;
-    padding: 14px 20px;
-    margin: 0 auto 28px;
-    max-width: 700px;
-  }
+/* table */
+.tbl-outer{border-radius:18px;overflow:hidden;border:1px solid var(--border2);margin-bottom:1.5rem}
+.tbl-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-family:'DM Mono',monospace;font-size:12px}
+thead tr{background:var(--s2)}
+th{padding:11px 14px;text-align:center;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);font-weight:400;border-bottom:1px solid var(--border);white-space:nowrap}
+th:first-child{text-align:left}
+td{padding:10px 14px;text-align:center;border-bottom:1px solid var(--border);font-weight:500;transition:background .15s}
+td:first-child{text-align:left;font-size:11px;color:var(--muted2);font-weight:400}
+tr:last-child td{border-bottom:none}
+tbody tr{background:var(--s1)}
+tbody tr:nth-child(even){background:var(--bg)}
+tbody tr:hover td{background:rgba(255,255,255,.02)}
+.row-today td{background:rgba(16,185,129,.05) !important}
+.row-today td:first-child{color:var(--tot) !important;font-weight:500}
+.row-expiry td:first-child{color:#f43f5e !important}
+.ce-v{color:var(--ce)}
+.pe-v{color:var(--pe)}
+.tot-v{color:var(--tot)}
+.fac-v{color:var(--muted);font-weight:400}
 
-  .formula-box .flabel {
-    font-size: 0.6rem;
-    color: var(--accent);
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
+.bdg{display:inline-flex;align-items:center;font-size:8px;padding:2px 6px;border-radius:4px;margin-left:6px;font-weight:500;letter-spacing:1px;vertical-align:middle;line-height:1.4}
+.bdg-t{background:rgba(16,185,129,.15);color:var(--tot2)}
+.bdg-e{background:rgba(244,63,94,.15);color:#fb7185}
 
-  .formula-box .ftext {
-    font-size: 0.9rem;
-    line-height: 1.8;
-  }
+/* status */
+.status{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--s1);border:1px solid var(--border);border-radius:12px;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.5px}
+.pulse{width:6px;height:6px;border-radius:50%;background:var(--tot);animation:p 2s infinite;flex-shrink:0}
+@keyframes p{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(16,185,129,.4)}50%{opacity:.5;box-shadow:0 0 0 5px rgba(16,185,129,0)}}
 
-  .formula-box .ftext strong { color: var(--accent); }
+.empty-row td{text-align:center;padding:32px;color:var(--muted);font-size:11px;background:var(--s1) !important}
 
-  .formula-box .example {
-    margin-top: 8px;
-    font-size: 0.75rem;
-    color: var(--muted);
-  }
-
-  .formula-box .example span { color: var(--accent); }
-
-  .section-label {
-    max-width: 700px;
-    margin: 0 auto 10px;
-    font-size: 0.6rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--muted);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .inputs-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    max-width: 700px;
-    margin: 0 auto 28px;
-  }
-
-  @media (max-width: 600px) {
-    .inputs-grid { grid-template-columns: 1fr 1fr; }
-  }
-
-  .icard {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 13px 15px;
-    transition: border-color 0.2s;
-  }
-
-  .icard:focus-within { border-color: var(--accent); }
-  .icard.ce:focus-within { border-color: var(--ce-color); }
-  .icard.pe:focus-within { border-color: var(--pe-color); }
-
-  .icard label {
-    display: block;
-    font-size: 0.58rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 7px;
-  }
-
-  .icard.ce label { color: var(--ce-color); }
-  .icard.pe label { color: var(--pe-color); }
-
-  .icard input {
-    width: 100%;
-    background: transparent;
-    border: none;
-    outline: none;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--text);
-    -moz-appearance: textfield;
-  }
-
-  .icard input::-webkit-inner-spin-button,
-  .icard input::-webkit-outer-spin-button { -webkit-appearance: none; }
-
-  .icard input::placeholder { color: #252a36; }
-
-  .today-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 12px;
-    max-width: 700px;
-    margin: 0 auto 28px;
-  }
-
-  @media (max-width: 480px) {
-    .today-grid { grid-template-columns: 1fr; }
-  }
-
-  .today-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 18px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .today-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-  }
-
-  .today-card.ce::before { background: var(--ce-color); }
-  .today-card.pe::before { background: var(--pe-color); }
-  .today-card.total::before { background: var(--total-color); }
-
-  .today-card .tc-label {
-    font-size: 0.58rem;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 12px;
-  }
-
-  .today-card .tc-val {
-    font-family: 'Syne', sans-serif;
-    font-size: 2.2rem;
-    font-weight: 800;
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-
-  .today-card.ce .tc-val { color: var(--ce-color); }
-  .today-card.pe .tc-val { color: var(--pe-color); }
-  .today-card.total .tc-val { color: var(--total-color); }
-
-  .today-card .tc-sub {
-    font-size: 0.65rem;
-    color: var(--muted);
-  }
-
-  .today-card .tc-calc {
-    font-size: 0.62rem;
-    color: var(--muted);
-    margin-top: 8px;
-    padding-top: 8px;
-    border-top: 1px solid var(--border);
-  }
-
-  .table-wrap {
-    max-width: 700px;
-    margin: 0 auto 24px;
-    overflow-x: auto;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.83rem;
-    background: var(--surface);
-  }
-
-  thead tr { background: var(--surface2); }
-
-  th {
-    padding: 11px 14px;
-    text-align: center;
-    font-size: 0.58rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-    font-weight: 400;
-    border-bottom: 1px solid var(--border);
-    white-space: nowrap;
-  }
-
-  th:first-child { text-align: left; }
-
-  td {
-    padding: 10px 14px;
-    text-align: center;
-    border-bottom: 1px solid rgba(30,35,48,0.5);
-    font-weight: 600;
-  }
-
-  td:first-child {
-    text-align: left;
-    font-size: 0.7rem;
-    color: var(--muted);
-    font-weight: 400;
-    letter-spacing: 1px;
-  }
-
-  tr:last-child td { border-bottom: none; }
-
-  .row-today td { background: rgba(0,212,170,0.06); }
-  .row-today td:first-child { color: var(--accent) !important; font-weight: 600; }
-  .row-expiry td:first-child { color: #ff4444 !important; }
-
-  .ce-val { color: var(--ce-color); }
-  .pe-val { color: var(--pe-color); }
-  .total-val { color: var(--total-color); }
-  .factor-val { color: var(--muted); font-size: 0.72rem; font-weight: 400; }
-
-  .badge {
-    display: inline-block;
-    font-size: 0.55rem;
-    padding: 2px 6px;
-    border-radius: 4px;
-    margin-left: 6px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    vertical-align: middle;
-  }
-
-  .badge-today  { background: rgba(0,212,170,0.15); color: var(--accent); }
-  .badge-expiry { background: rgba(255,68,68,0.15);  color: #ff4444; }
-
-  .status-bar {
-    max-width: 700px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 11px 18px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 0.68rem;
-    color: var(--muted);
-  }
-
-  .dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--accent);
-    animation: pulse 2s infinite;
-    flex-shrink: 0;
-  }
-
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.2} }
-
-  .empty-row td {
-    text-align: center;
-    padding: 28px;
-    color: var(--muted);
-    font-size: 0.75rem;
-    font-weight: 400;
-  }
+/* fade in */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.hdr{animation:fadeUp .5s ease both}
+.inputs-row{animation:fadeUp .5s .1s ease both}
+.cards-row{animation:fadeUp .5s .2s ease both}
+.tbl-outer{animation:fadeUp .5s .3s ease both}
+.status{animation:fadeUp .5s .4s ease both}
 </style>
-</head>
-<body>
 
-<header>
-  <h1>Options <span>Fair Value</span> Calculator</h1>
-  <p>Opening Day Fair Value · Time Decay Model</p>
-</header>
+<div class="wrap">
+  <div class="hdr">
+    <div class="hdr-eyebrow">Options Pricing Tool</div>
+    <h1>Fair <em>Value</em> Calculator</h1>
+    <div class="hdr-sub">Opening Day · Time Decay Model</div>
+  </div>
 
-<div class="formula-box">
-  <div class="flabel">Formula Used</div>
-  <div class="ftext">
-    Fair Value = <strong>ATM Premium × √(Days Left / Total Days)</strong>
+  <div class="sec-label">Inputs</div>
+  <div class="inputs-row">
+    <div class="ibox ce">
+      <label>ATM CE Premium</label>
+      <input type="number" id="ce" placeholder="120" oninput="calc()">
+    </div>
+    <div class="ibox pe">
+      <label>ATM PE Premium</label>
+      <input type="number" id="pe" placeholder="100" oninput="calc()">
+    </div>
+    <div class="ibox">
+      <label>Total Days</label>
+      <input type="number" id="totalDays" placeholder="7" oninput="calc()">
+    </div>
+    <div class="ibox">
+      <label>Days Left</label>
+      <input type="number" id="daysLeft" placeholder="2" oninput="calc()">
+    </div>
   </div>
-  <div class="example">
-    Example: CE = 120 &nbsp;|&nbsp; Days Left = 2 &nbsp;|&nbsp; Total = 5
-    &nbsp;→&nbsp; 120 × √(2/5) = <span>75.9</span>
-  </div>
-</div>
 
-<div class="section-label">Inputs</div>
-<div class="inputs-grid">
-  <div class="icard ce">
-    <label>ATM CE Premium</label>
-    <input type="number" id="ce" placeholder="120" oninput="calc()">
+  <div class="sec-label">Today's Opening Fair Value</div>
+  <div class="cards-row">
+    <div class="scard ce">
+      <div class="scard-dot"></div>
+      <div class="scard-lbl">CE Fair Value</div>
+      <div class="scard-val" id="todayCE">—</div>
+      <div class="scard-sub">Call Option</div>
+    </div>
+    <div class="scard pe">
+      <div class="scard-dot"></div>
+      <div class="scard-lbl">PE Fair Value</div>
+      <div class="scard-val" id="todayPE">—</div>
+      <div class="scard-sub">Put Option</div>
+    </div>
+    <div class="scard tot">
+      <div class="scard-dot"></div>
+      <div class="scard-lbl">Combined</div>
+      <div class="scard-val" id="todayTotal">—</div>
+      <div class="scard-sub">PE + CE Total</div>
+    </div>
   </div>
-  <div class="icard pe">
-    <label>ATM PE Premium</label>
-    <input type="number" id="pe" placeholder="100" oninput="calc()">
-  </div>
-  <div class="icard">
-    <label>Total Days (Expiry)</label>
-    <input type="number" id="totalDays" placeholder="5" oninput="calc()">
-  </div>
-  <div class="icard">
-    <label>Days Left Today</label>
-    <input type="number" id="daysLeft" placeholder="2" oninput="calc()">
-  </div>
-</div>
 
-<div class="section-label">Today's Opening Fair Value</div>
-<div class="today-grid">
-  <div class="today-card ce">
-    <div class="tc-label">CE Fair Value</div>
-    <div class="tc-val" id="todayCE">—</div>
-    <div class="tc-sub">Call Option</div>
-    <div class="tc-calc" id="calcCE">&nbsp;</div>
+  <div class="sec-label">Day-wise Fair Value Table</div>
+  <div class="tbl-outer">
+    <div class="tbl-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>Days Left</th>
+            <th>√ Factor</th>
+            <th style="color:var(--ce2)">CE Fair Value</th>
+            <th style="color:var(--pe2)">PE Fair Value</th>
+            <th style="color:var(--tot2)">PE + CE</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr class="empty-row"><td colspan="6">Enter all inputs to see the table</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-  <div class="today-card pe">
-    <div class="tc-label">PE Fair Value</div>
-    <div class="tc-val" id="todayPE">—</div>
-    <div class="tc-sub">Put Option</div>
-    <div class="tc-calc" id="calcPE">&nbsp;</div>
-  </div>
-  <div class="today-card total">
-    <div class="tc-label">PE + CE Combined</div>
-    <div class="tc-val" id="todayTotal">—</div>
-    <div class="tc-sub">Total Premium</div>
-    <div class="tc-calc" id="calcTotal">&nbsp;</div>
-  </div>
-</div>
 
-<div class="section-label">Day-wise Fair Value Table</div>
-<div class="table-wrap">
-  <table>
-    <thead>
-      <tr>
-        <th>Day</th>
-        <th>Days Left</th>
-        <th>√ Factor</th>
-        <th style="color:var(--ce-color)">CE Fair Value</th>
-        <th style="color:var(--pe-color)">PE Fair Value</th>
-        <th style="color:var(--total-color)">PE + CE</th>
-      </tr>
-    </thead>
-    <tbody id="tableBody">
-      <tr class="empty-row">
-        <td colspan="6">Enter CE, PE, Total Days &amp; Days Left to see the table</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="status-bar">
-  <div class="dot"></div>
-  <span id="statusText">Waiting for input…</span>
+  <div class="status">
+    <div class="pulse"></div>
+    <span id="statusText">Waiting for input…</span>
+  </div>
 </div>
 
 <script>
-  function calc() {
-    const ce    = parseFloat(document.getElementById('ce').value);
-    const pe    = parseFloat(document.getElementById('pe').value);
-    const total = parseInt(document.getElementById('totalDays').value);
-    const today = parseInt(document.getElementById('daysLeft').value);
+function calc(){
+  const ce=parseFloat(document.getElementById('ce').value);
+  const pe=parseFloat(document.getElementById('pe').value);
+  const total=parseInt(document.getElementById('totalDays').value);
+  const today=parseInt(document.getElementById('daysLeft').value);
 
-    if (!ce || !pe || !total || !today || total < 1 || today < 1 || today > total) {
-      document.getElementById('tableBody').innerHTML =
-        `<tr class="empty-row"><td colspan="6">Enter valid CE, PE, Total Days &amp; Days Left Today</td></tr>`;
-      ['todayCE','todayPE','todayTotal'].forEach(id =>
-        document.getElementById(id).textContent = '—');
-      ['calcCE','calcPE','calcTotal'].forEach(id =>
-        document.getElementById(id).innerHTML = '&nbsp;');
-      document.getElementById('statusText').textContent = 'Waiting for input…';
-      return;
-    }
-
-    // Today's fair value
-    const factor   = Math.sqrt(today / total);
-    const ceFair   = ce * factor;
-    const peFair   = pe * factor;
-    const combined = ceFair + peFair;
-
-    document.getElementById('todayCE').textContent    = ceFair.toFixed(1);
-    document.getElementById('todayPE').textContent    = peFair.toFixed(1);
-    document.getElementById('todayTotal').textContent = combined.toFixed(1);
-
-    document.getElementById('calcCE').textContent
-      = `${ce} × √(${today}/${total}) = ${ceFair.toFixed(1)}`;
-    document.getElementById('calcPE').textContent
-      = `${pe} × √(${today}/${total}) = ${peFair.toFixed(1)}`;
-    document.getElementById('calcTotal').textContent
-      = `${ceFair.toFixed(1)} + ${peFair.toFixed(1)} = ${combined.toFixed(1)}`;
-
-    // Table: Day 1 = totalDays remaining (Monday open), last row = 1 day left (expiry)
-    let rows = '';
-    for (let dLeft = total; dLeft >= 1; dLeft--) {
-      const f    = Math.sqrt(dLeft / total);
-      const ceV  = (ce * f).toFixed(1);
-      const peV  = (pe * f).toFixed(1);
-      const totV = (ce * f + pe * f).toFixed(1);
-      const dayNum = total - dLeft + 1;
-
-      const isToday  = (dLeft === today);
-      const isExpiry = (dLeft === 1);
-
-      let dayLabel = `Day ${dayNum}`;
-      if (isToday)  dayLabel += ` <span class="badge badge-today">TODAY</span>`;
-      if (isExpiry) dayLabel += ` <span class="badge badge-expiry">EXPIRY</span>`;
-
-      rows += `
-        <tr class="${isToday ? 'row-today' : isExpiry ? 'row-expiry' : ''}">
-          <td>${dayLabel}</td>
-          <td>${dLeft}</td>
-          <td class="factor-val">${f.toFixed(4)}</td>
-          <td class="ce-val">${ceV}</td>
-          <td class="pe-val">${peV}</td>
-          <td class="total-val">${totV}</td>
-        </tr>`;
-    }
-
-    document.getElementById('tableBody').innerHTML = rows;
-    document.getElementById('statusText').textContent =
-      `CE: ${ce}  |  PE: ${pe}  |  Days Left: ${today}/${total}  |  Fair CE ≈ ${ceFair.toFixed(1)}  |  Fair PE ≈ ${peFair.toFixed(1)}  |  Total ≈ ${combined.toFixed(1)}`;
+  if(!ce||!pe||!total||!today||total<1||today<1||today>total){
+    document.getElementById('tableBody').innerHTML='<tr class="empty-row"><td colspan="6">Enter valid inputs to see the table</td></tr>';
+    ['todayCE','todayPE','todayTotal'].forEach(id=>document.getElementById(id).textContent='—');
+    document.getElementById('statusText').textContent='Waiting for input…';
+    return;
   }
 
-  window.onload = () => {
-    document.getElementById('ce').value        = 120;
-    document.getElementById('pe').value        = 100;
-    document.getElementById('totalDays').value = 5;
-    document.getElementById('daysLeft').value  = 2;
-    calc();
-  };
+  const factor=Math.sqrt(today/total);
+  const ceFair=ce*factor;
+  const peFair=pe*factor;
+  const combined=ceFair+peFair;
+
+  document.getElementById('todayCE').textContent=ceFair.toFixed(1);
+  document.getElementById('todayPE').textContent=peFair.toFixed(1);
+  document.getElementById('todayTotal').textContent=combined.toFixed(1);
+
+  let rows='';
+  for(let dLeft=total;dLeft>=1;dLeft--){
+    const f=Math.sqrt(dLeft/total);
+    const ceV=(ce*f).toFixed(1);
+    const peV=(pe*f).toFixed(1);
+    const totV=(ce*f+pe*f).toFixed(1);
+    const dayNum=total-dLeft+1;
+    const isToday=(dLeft===today);
+    const isExpiry=(dLeft===1);
+    let dayLabel=`Day ${dayNum}`;
+    if(isToday) dayLabel+=` <span class="bdg bdg-t">TODAY</span>`;
+    if(isExpiry) dayLabel+=` <span class="bdg bdg-e">EXPIRY</span>`;
+    rows+=`<tr class="${isToday?'row-today':isExpiry?'row-expiry':''}">
+      <td>${dayLabel}</td>
+      <td>${dLeft}</td>
+      <td class="fac-v">${f.toFixed(4)}</td>
+      <td class="ce-v">${ceV}</td>
+      <td class="pe-v">${peV}</td>
+      <td class="tot-v">${totV}</td>
+    </tr>`;
+  }
+  document.getElementById('tableBody').innerHTML=rows;
+  document.getElementById('statusText').textContent=
+    `CE: ${ce}  ·  PE: ${pe}  ·  Days Left: ${today}/${total}  ·  Fair CE ≈ ${ceFair.toFixed(1)}  ·  Fair PE ≈ ${peFair.toFixed(1)}  ·  Total ≈ ${combined.toFixed(1)}`;
+}
+
+window.onload=()=>{
+  document.getElementById('ce').value=120;
+  document.getElementById('pe').value=100;
+  document.getElementById('totalDays').value=7;
+  document.getElementById('daysLeft').value=2;
+  calc();
+};
 </script>
-</body>
-</html>
